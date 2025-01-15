@@ -12,6 +12,7 @@ import {
   Select,
   InputLabel,
   FormControl,
+  useMediaQuery,
 } from "@mui/material";
 
 const MovieSearch = () => {
@@ -92,6 +93,9 @@ const MovieSearch = () => {
 
   const totalPages = Math.ceil(totalResults / 10);
 
+  // Use media query to check for small screens
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
+
   return (
     <Box p={4}>
       {/* Search Box */}
@@ -110,58 +114,68 @@ const MovieSearch = () => {
       </Box>
 
       {/* Filter Section */}
-      <Box display="flex" justifyContent="space-around" mb={4}>
-        <Box style={{ width: "20%", display: "flex", flexDirection: "column" }}>
-          <TextField
-            label="Year"
-            type="number"
-            value={yearFilter}
-            onChange={(e) => setYearFilter(e.target.value)}
-            placeholder="Enter Year"
-            fullWidth
-            margin="normal"
-          />
-        </Box>
+      <Box mb={4}>
+        <Grid container spacing={3} justifyContent="space-between">
+          <Grid item xs={12} sm={6} md={3}>
+            <TextField
+              label="Year"
+              type="number"
+              value={yearFilter}
+              onChange={(e) => setYearFilter(e.target.value)}
+              placeholder="Enter Year"
+              fullWidth
+              margin="normal"
+            />
+          </Grid>
 
-        <Box style={{ width: "20%", display: "flex", flexDirection: "column" }}>
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Rating</InputLabel>
-            <Select
-              value={ratingFilter}
-              onChange={(e) => setRatingFilter(e.target.value)}
-            >
-              <MenuItem value="">All Ratings</MenuItem>
-              <MenuItem value="8.0">8.0 and above</MenuItem>
-              <MenuItem value="7.0">7.0 and above</MenuItem>
-              <MenuItem value="6.0">6.0 and above</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
+          <Grid item xs={12} sm={6} md={3}>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Rating</InputLabel>
+              <Select
+                value={ratingFilter}
+                onChange={(e) => setRatingFilter(e.target.value)}
+              >
+                <MenuItem value="">All Ratings</MenuItem>
+                <MenuItem value="8.0">8.0 and above</MenuItem>
+                <MenuItem value="7.0">7.0 and above</MenuItem>
+                <MenuItem value="6.0">6.0 and above</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
 
-        <Box style={{ width: "20%", display: "flex", flexDirection: "column" }}>
-          <TextField
-            label="Filter by Name"
-            value={nameFilter}
-            onChange={(e) => setNameFilter(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-        </Box>
+          <Grid item xs={12} sm={6} md={3}>
+            <TextField
+              label="Filter by Name"
+              value={nameFilter}
+              onChange={(e) => setNameFilter(e.target.value)}
+              fullWidth
+              margin="normal"
+            />
+          </Grid>
 
-        <Box style={{ width: "20%", display: "flex", flexDirection: "column" }}>
-          <TextField
-            label="Filter by Min Duration (min)"
-            type="number"
-            value={durationFilter}
-            onChange={(e) => setDurationFilter(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-        </Box>
+          <Grid item xs={12} sm={6} md={3}>
+            <TextField
+              label="Filter by Min Duration (min)"
+              type="number"
+              value={durationFilter}
+              onChange={(e) => setDurationFilter(e.target.value)}
+              fullWidth
+              margin="normal"
+            />
+          </Grid>
+        </Grid>
 
-        <Button variant="outlined" onClick={handleFilter} style={{ marginTop: "16px" }}>
-          Apply Filters
-        </Button>
+        {/* Apply Filters Button */}
+        <Box display="flex" justifyContent={isSmallScreen ? "center" : "flex-start"}>
+          <Button
+            variant="outlined"
+            onClick={handleFilter}
+            style={{ marginTop: "16px" }}
+            fullWidth={isSmallScreen} // Full width for smaller screens
+          >
+            Apply Filters
+          </Button>
+        </Box>
       </Box>
 
       {/* Movies Grid */}
