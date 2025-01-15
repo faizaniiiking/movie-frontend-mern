@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { AppBar, Toolbar, Typography, Box, Button, useMediaQuery, IconButton, Drawer } from "@mui/material";
 import { Link } from "react-router-dom";
-import MenuIcon from "@mui/icons-material/Menu"; // Import only once
+import MenuIcon from "@mui/icons-material/Menu"; // Import Menu Icon
+import CloseIcon from "@mui/icons-material/Close"; // Import Close Icon
 
 const Navbar = () => {
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
@@ -29,6 +30,10 @@ const Navbar = () => {
           {/* Drawer for mobile */}
           <Drawer anchor="right" open={open} onClose={toggleDrawer}>
             <Box width={250} role="presentation" onClick={toggleDrawer} onKeyDown={toggleDrawer}>
+              {/* Close Button */}
+              <IconButton onClick={toggleDrawer} style={{ position: "absolute", top: 10, right: 10 }}>
+                <CloseIcon />
+              </IconButton>
               <Button color="inherit" component={Link} to="/" fullWidth>Home</Button>
               <Button color="inherit" component={Link} to="/movies" fullWidth>Search Movies</Button>
               <Button color="inherit" component={Link} to="/login" fullWidth>Login</Button>
