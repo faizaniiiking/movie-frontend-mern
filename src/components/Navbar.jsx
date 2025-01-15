@@ -1,9 +1,15 @@
-import React from "react";
-import { AppBar, Toolbar, Typography, Box, Button, useMediaQuery } from "@mui/material";
+import React, { useState } from "react";
+import { AppBar, Toolbar, Typography, Box, Button, useMediaQuery, IconButton, Drawer } from "@mui/material";
 import { Link } from "react-router-dom";
+import MenuIcon from "@mui/icons-material/Menu"; // Import only once
 
 const Navbar = () => {
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm")); // Check for small screens
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const [open, setOpen] = useState(false);
+
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
 
   return (
     <AppBar position="static" style={{ backgroundColor: "#3f51b5" }}>
@@ -12,17 +18,37 @@ const Navbar = () => {
           <Typography variant="h6" component="div" style={{ fontWeight: "bold" }}>
             Movie Search App
           </Typography>
-          <Box display="flex" flexDirection={isMobile ? "column" : "row"} alignItems="center">
-            <Button color="inherit" component={Link} to="/" style={{ margin: isMobile ? "5px 0" : "0 10px" }}>
-              Home
-            </Button>
-            <Button color="inherit" component={Link} to="/movies" style={{ margin: isMobile ? "5px 0" : "0 10px" }}>
-              Search Movies
-            </Button>
-            <Button color="inherit" component={Link} to="/login" style={{ margin: isMobile ? "5px 0" : "0 10px" }}>
-              Login
-            </Button>
-          </Box>
+          
+          {/* Menu Button for Mobile */}
+          {isMobile && (
+            <IconButton color="inherit" onClick={toggleDrawer}>
+              <MenuIcon />
+            </IconButton>
+          )}
+          
+          {/* Drawer for mobile */}
+          <Drawer anchor="right" open={open} onClose={toggleDrawer}>
+            <Box width={250} role="presentation" onClick={toggleDrawer} onKeyDown={toggleDrawer}>
+              <Button color="inherit" component={Link} to="/" fullWidth>Home</Button>
+              <Button color="inherit" component={Link} to="/movies" fullWidth>Search Movies</Button>
+              <Button color="inherit" component={Link} to="/login" fullWidth>Login</Button>
+            </Box>
+          </Drawer>
+
+          {/* Desktop Navbar Links */}
+          {!isMobile && (
+            <Box display="flex" flexDirection="row" alignItems="center">
+              <Button color="inherit" component={Link} to="/" style={{ margin: "0 10px" }}>
+                Home
+              </Button>
+              <Button color="inherit" component={Link} to="/movies" style={{ margin: "0 10px" }}>
+                Search Movies
+              </Button>
+              <Button color="inherit" component={Link} to="/login" style={{ margin: "0 10px" }}>
+                Login
+              </Button>
+            </Box>
+          )}
         </Box>
       </Toolbar>
     </AppBar>
