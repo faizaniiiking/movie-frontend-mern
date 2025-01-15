@@ -12,6 +12,7 @@ A React-based movie search application that allows users to search for movies, f
 - **Pagination**: Navigate between movie pages if there are more than 10 results.
 - **Movie Details**: Display information such as movie title, year, duration, and IMDb rating.
 - **Responsive Design**: The application works on all screen sizes.
+- **Page Not Found**: A custom "404 Page Not Found" route to handle invalid URLs or non-existing routes.
 
 ## Installation
 

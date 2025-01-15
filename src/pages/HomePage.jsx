@@ -7,6 +7,7 @@ const HomePage = () => {
   const [totalResults, setTotalResults] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [loadingDetails, setLoadingDetails] = useState(true); // To manage loading of detailed movie info
 
   const apiKey = "71478495"; // Your OMDb API key
 
@@ -29,9 +30,37 @@ const HomePage = () => {
     }
   };
 
+  const fetchMovieDetails = async (imdbID) => {
+    try {
+      const url = `https://www.omdbapi.com/?i=${imdbID}&apikey=${apiKey}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching movie details:", error);
+      return {};
+    }
+  };
+
   useEffect(() => {
     fetchMovies(currentPage); // Fetch movies on page load
   }, [currentPage]);
+
+  useEffect(() => {
+    if (movies.length > 0) {
+      const fetchDetailsForMovies = async () => {
+        const detailedMovies = await Promise.all(
+          movies.map(async (movie) => {
+            const details = await fetchMovieDetails(movie.imdbID);
+            return { ...movie, ...details }; // Merge basic and detailed data
+          })
+        );
+        setMovies(detailedMovies); // Update movies state with detailed data
+        setLoadingDetails(false); // Data fetched, stop loading
+      };
+      fetchDetailsForMovies();
+    }
+  }, [movies]);
 
   const handleLoadMore = () => {
     setCurrentPage((prevPage) => prevPage + 1); // Increment page number to load more movies
@@ -72,10 +101,22 @@ const HomePage = () => {
                   <CardContent>
                     <Typography variant="h6">{movie.Title}</Typography>
                     <Typography variant="body2" color="textSecondary">
-                      Year: {movie.Year}
+                      Year: {movie.Year || "N/A"}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
                       Rating: {movie.imdbRating || "N/A"}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Duration: {movie.Runtime || "N/A"}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Genre: {movie.Genre || "N/A"}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Actors: {movie.Actors || "N/A"}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Type: {movie.Type || "N/A"}
                     </Typography>
                   </CardContent>
                 </Card>
